@@ -2,14 +2,15 @@
 """ Module for task 9
 """
 
-from typing import Sequence, Union, Any
+from typing import Mapping, Union, Any, TypeVar
 
 
-# The types of the elements of the input are not known
-def safe_first_element(lst: Sequence[Any]) -> Union[Any, None]:
-    """ Return the first element if the list exists, else None
+T = TypeVar('T')
+
+def safely_get_value(dct: Mapping, key: Any, default: Union[T, None] = None) -> Union[Any, T]:
+    """ Function to safely get value from dict
     """
-    if lst:
-        return lst[0]
+    if key in dct:
+        return dct[key]
     else:
-        return None
+        return default
