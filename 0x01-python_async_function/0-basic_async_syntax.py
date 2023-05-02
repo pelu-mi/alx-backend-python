@@ -2,13 +2,14 @@
 """ Module for task 0
 """
 
+from typing import Union
 import asyncio
 from random import uniform
 
 
-async def wait_random(max_delay=10):
+async def wait_random(max_delay: Union[int, float] = 10) -> float:
     """ Function to generate random delay using asyncio
     """
-    delay = uniform(0, max_delay)
+    delay: float = uniform(0, max_delay)
     await asyncio.sleep(delay)
     return delay
