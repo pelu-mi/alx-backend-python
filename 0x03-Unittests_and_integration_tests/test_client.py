@@ -19,7 +19,7 @@ class TestGithubOrgClient(unittest.TestCase):
     ])
     @patch("client.get_json")
     def test_org(self, org: str, res: Dict, mock_fn: MagicMock) -> None:
-        """ Test that GithubOrgClient.org returns the right value 
+        """ Test that GithubOrgClient.org returns the right value
         """
         mock_fn.return_value = MagicMock(return_value=res)
         git_client_test = GithubOrgClient(org)
@@ -30,13 +30,14 @@ class TestGithubOrgClient(unittest.TestCase):
     def test_public_repos_url(self) -> None:
         """ Test that the result of _public_repos_url is the expected one
         """
-        with patch("client.GithubOrgClient.org",
-                new_callable=PropertyMock
-                ) as mock_org:
+        with patch(
+                "client.GithubOrgClient.org",
+                new_callable=PropertyMock) as mock_org:
             mock_org.return_value = {
                 "repos_url": "https://api.github.com/orgs/google/repos",
             }
-            self.assertEqual(GithubOrgClient("google")._public_repos_url,
+            self.assertEqual(
+                    GithubOrgClient("google")._public_repos_url,
                     "https://api.github.com/orgs/google/repos")
 
     @patch("client.get_json")
@@ -71,10 +72,12 @@ class TestGithubOrgClient(unittest.TestCase):
             ]
         }
         mock_get_json.return_value = test_payload["repos"]
-        with patch("client.GithubOrgClient._public_repos_url",
+        with patch(
+                "client.GithubOrgClient._public_repos_url",
                 new_callable=PropertyMock) as mock_public_repos_url:
             mock_public_repos_url.return_value = test_payload['repos_url']
-            self.assertEqual(GithubOrgClient("google").public_repos(),
+            self.assertEqual(
+                    GithubOrgClient("google").public_repos(),
                     ["kratu", "sirius"])
             mock_public_repos_url.assert_called_once()
         mock_get_json.assert_called_once()
