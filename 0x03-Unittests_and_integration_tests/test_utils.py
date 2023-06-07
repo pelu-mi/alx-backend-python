@@ -3,11 +3,11 @@
 """
 
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 from parameterized import parameterized
 from typing import Dict, Tuple, Union
 # Import methods to test
-from utils import access_nested_map
+from utils import access_nested_map, get_json
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -42,3 +42,23 @@ class TestAccessNestedMap(unittest.TestCase):
         with self.assertRaises(exception) as err:
             access_nested_map(nested_map, path)
         self.assertEqual(str(err.exception), msg)
+
+
+class TestGetJson(unittest.TestCase):
+    """ Testing utils.get_json
+    """
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False}),
+    ])
+    def test_get_json(
+            self,
+            url: str,
+            payload: Dict
+            ) -> None:
+        """ Test output for utils.get_json
+        """
+        attr = {"json.return_value": payload}
+        with patch("requests.get", return_value=Mock(**attr)) as response:
+            self.assertEqual(get_json(url), payload)
+            response.assert_called_once_with(url)
